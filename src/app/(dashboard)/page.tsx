@@ -1,6 +1,7 @@
 "use client"
 import { BreadcrumbWithCustomSeparator } from "@/components/custom/breadcumps"
 import { Card, CardContent } from "@/components/ui/card"
+import { useAuthContext } from "@/context/AuthContext"
 import {
   LineChart,
   Line,
@@ -88,6 +89,7 @@ const breadCumbs = [
 ]
 
 export default function Dashboard() {
+  const { accessToken, userInfo } = useAuthContext()
   return (
     <div className="md:p-6 p-4">
       <h1 className="text-xl font-medium mb-4">Dashboard</h1>

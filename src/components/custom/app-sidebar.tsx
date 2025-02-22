@@ -43,6 +43,9 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { useAuthContext } from "@/context/AuthContext"
+import Cookies from 'js-cookie';
+import { useRouter } from "next/navigation"
 
 
 export function AppSidebar() {
@@ -54,6 +57,8 @@ export function AppSidebar() {
     document.documentElement.classList.toggle("dark")
   }
 
+  const { userInfo } = useAuthContext()
+  const router = useRouter()
   return (
     <Sidebar variant="floating" collapsible="icon" className="hidden md:flex">
       <SidebarHeader>
@@ -204,7 +209,7 @@ export function AppSidebar() {
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <div className="flex flex-col gap-0.5 group-data-[collapsible=icon]:hidden">
-                <span className="font-medium">shadcn</span>
+                <span className="font-medium">  {userInfo?.username} </span>
                 <span className="text-xs text-muted-foreground">m@example.com</span>
               </div>
               <ChevronDown className="ml-auto h-4 w-4 group-data-[collapsible=icon]:hidden" />
@@ -228,7 +233,7 @@ export function AppSidebar() {
               Notifications
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-600">
+            <DropdownMenuItem className="text-red-600" onClick={() => {Cookies.remove('accessToken'); router.push("/login")}}>
               <LogOut className="mr-2 h-4 w-4" />
               Log out
             </DropdownMenuItem>

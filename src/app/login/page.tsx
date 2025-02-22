@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -47,6 +47,13 @@ export default function LoginPage() {
       setError("An error occurred. Please try again.")
     }
   }
+
+  useEffect(() => {
+    const token = Cookies.get('accessToken');
+        if (token) {
+          router.push("/")   
+        }
+  },[])
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
