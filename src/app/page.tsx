@@ -1,101 +1,246 @@
-import Image from "next/image";
+"use client"
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  AreaChart,
+  Area,
+  Legend
+} from 'recharts'
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+const monthlyData = [
+  { month: "Ene", value: 400 },
+  { month: "Feb", value: 300 },
+  { month: "Mar", value: 800 },
+  { month: "Abr", value: 500 },
+  { month: "May", value: 500 },
+  { month: "Jun", value: 900 },
+  { month: "Jul", value: 800 },
+  { month: "Ago", value: 950 },
+  { month: "Sep", value: 900 },
+  { month: "Oct", value: 700 },
+  { month: "Nov", value: 800 },
+  { month: "Dic", value: 850 },
+]
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+const departmentData = [
+  { name: "RR.HH.", value: 245 },
+  { name: "Ventas", value: 384 },
+  { name: "IT", value: 164 },
+  { name: "Marketing", value: 293 },
+  { name: "Operaciones", value: 426 },
+  { name: "Finanzas", value: 173 },
+]
+
+const faultTypeData = [
+  { name: "Retraso", value: 35 },
+  { name: "Ausencia", value: 25 },
+  { name: "Sin Justificar", value: 20 },
+  { name: "Permiso", value: 20 },
+]
+
+const GRAYS = ["#333333", "#666666", "#999999", "#CCCCCC"]
+
+const accumulatedData = [
+  { month: "Ene", Faltas: 30, Incidencias: 45 },
+  { month: "Feb", Faltas: 25, Incidencias: 38 },
+  { month: "Mar", Faltas: 40, Incidencias: 55 },
+  { month: "Abr", Faltas: 35, Incidencias: 42 },
+  { month: "May", Faltas: 28, Incidencias: 39 },
+  { month: "Jun", Faltas: 45, Incidencias: 62 },
+]
+
+const commonTooltipStyle = {
+  contentStyle: {
+    backgroundColor: "#fff",
+    border: "none",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+    borderRadius: "4px",
+  },
 }
+
+const commonAxisStyle = {
+  axisLine: false,
+  tickLine: false,
+  tick: { fontSize: 12, fill: "#666" },
+}
+
+export default function Dashboard() {
+  return (
+    <div className="p-6">
+      <h1 className="text-xl font-medium mb-4">Dashboard</h1>
+
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-6">
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground">Total Incidencias</p>
+              <p className="text-3xl font-medium">2,345</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground">Incidencias Activas</p>
+              <p className="text-3xl font-medium">123</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground">Total Faltas</p>
+              <p className="text-3xl font-medium">456</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="space-y-1">
+              <p className="text-sm text-muted-foreground">Faltas del Mes</p>
+              <p className="text-3xl font-medium">45</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2 mb-6">
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="mb-4">
+              <h2 className="text-sm text-muted-foreground">Incidencias por Mes</h2>
+            </div>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                  data={monthlyData}
+                  margin={{
+                    top: 5,
+                    right: 10,
+                    left: 10,
+                    bottom: 0,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="month" {...commonAxisStyle} />
+                  <YAxis {...commonAxisStyle} />
+                  <Tooltip {...commonTooltipStyle} />
+                  <Line type="monotone" dataKey="value" stroke="#000" strokeWidth={1.5} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="mb-4">
+              <h2 className="text-sm text-muted-foreground">Incidencias por Departamento</h2>
+            </div>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={departmentData}
+                  margin={{
+                    top: 5,
+                    right: 10,
+                    left: 10,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="name" {...commonAxisStyle} />
+                  <YAxis {...commonAxisStyle} />
+                  <Tooltip {...commonTooltipStyle} />
+                  <Bar dataKey="value" fill="#000" radius={[4, 4, 0, 0]} fillOpacity={0.8} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="mb-4">
+              <h2 className="text-sm text-muted-foreground">Distribución de Tipos de Faltas</h2>
+            </div>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={faultTypeData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {faultTypeData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={GRAYS[index % GRAYS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip {...commonTooltipStyle} />
+                  <Legend
+                    verticalAlign="bottom"
+                    height={36}
+                    formatter={(value) => <span className="text-sm text-gray-600">{value}</span>}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="mb-4">
+              <h2 className="text-sm text-muted-foreground">Tendencias Acumuladas</h2>
+            </div>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={accumulatedData}
+                  margin={{
+                    top: 5,
+                    right: 10,
+                    left: 10,
+                    bottom: 0,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="month" {...commonAxisStyle} />
+                  <YAxis {...commonAxisStyle} />
+                  <Tooltip {...commonTooltipStyle} />
+                  <Area type="monotone" dataKey="Faltas" stackId="1" stroke="#000" fill="#000" fillOpacity={0.3} />
+                  <Area type="monotone" dataKey="Incidencias" stackId="1" stroke="#666" fill="#666" fillOpacity={0.3} />
+                  <Legend
+                    verticalAlign="top"
+                    height={36}
+                    formatter={(value) => <span className="text-sm text-gray-600">{value}</span>}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
+
