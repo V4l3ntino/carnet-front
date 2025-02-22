@@ -3,7 +3,6 @@ import './globals.css'
 import { AppSidebar } from "@/components/custom/app-sidebar";
 import { SidebarInset, SidebarProvider} from "@/components/ui/sidebar";
 import { MobileMenuButton } from "@/components/custom/mobile-button";
-import { BreadcrumbWithCustomSeparator } from "@/components/custom/breadcumps";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,13 +18,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body>
-        <SidebarProvider>
-            <MobileMenuButton />
-            <AppSidebar />
-            <SidebarInset>
-              <main className="mt-3 ml-2">{children}</main>
-            </SidebarInset>
-        </SidebarProvider>
+        {children}
       </body>
     </html>
   );
