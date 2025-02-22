@@ -8,7 +8,7 @@ export function MobileMenuButton() {
     const { toggleSidebar } = useSidebar()
   
     return (
-      <Button variant="ghost" size="icon" className="md:hidden fixed top-1 left-1 z-50" onClick={toggleSidebar}>
+      <Button variant="ghost" size="icon" className="md:hidden fixed z-50" onClick={toggleSidebar}>
         <Menu className="h-6 w-6" />
         <span className="sr-only">Toggle Menu</span>
       </Button>

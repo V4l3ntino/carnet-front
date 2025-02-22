@@ -1,4 +1,5 @@
 "use client"
+import { BreadcrumbWithCustomSeparator } from "@/components/custom/breadcumps"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   LineChart,
@@ -75,10 +76,22 @@ const commonAxisStyle = {
   tick: { fontSize: 12, fill: "#666" },
 }
 
+const breadCumbs = [
+  {
+    name: "Home",
+    url: "/"
+  },
+  {
+    name: "Incidencias",
+    url: "/"
+  }
+]
+
 export default function Dashboard() {
   return (
-    <div className="p-6">
+    <div className="md:p-6 p-4">
       <h1 className="text-xl font-medium mb-4">Dashboard</h1>
+      <BreadcrumbWithCustomSeparator items={breadCumbs}/>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-6">
         <Card className="border-0 shadow-sm">
