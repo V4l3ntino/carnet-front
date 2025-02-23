@@ -128,6 +128,8 @@ export interface Profesor {
 export interface decodeJWT {
   sub: string,
   username: string,
+  fullName: string,
+  rolname: string,
   permisos: permisoTablas
 }
 

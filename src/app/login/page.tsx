@@ -107,6 +107,18 @@ export default function LoginPage() {
             <Button type="submit" className="w-full">
               Sign in
             </Button>
+            <div className="relative mt-2">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-gray-50 px-2 text-muted-foreground">Or continue with</span>
+              </div>
+            </div>
+
+            <Button type="button" variant="outline" onClick={() => router.push("/signup")} className="w-full mt-2">
+              Create new account
+            </Button>
           </div>
         </form>
       </div>
