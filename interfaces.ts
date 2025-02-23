@@ -72,17 +72,17 @@ export interface IncidenciaEmmit {
   tipoIncidencia: string,
 }
 
+
 export interface IncidenciaTable {
   id: string;
-  descripcion: string
-  creador: string
-  alumno: string
-  tipoIncidencia: string
-  created_at: Date
-  isNew?: boolean
+  descripcion: string;
+  created_at: string;
+  creador: string;
+  alumno: string;
+  tipoIncidencia: string;
+  severidad: string;
+  puntos: number;
 }
-
-
 
 export interface Alumno {
   idea: string;

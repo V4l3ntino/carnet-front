@@ -26,7 +26,7 @@ export default function LoginPage() {
 
     // This is where you would typically make an API call to verify credentials
     try {
-      const response = await fetch("http://localhost:3000/api/auth", {
+      const response = await fetch("http://192.168.0.103:3000/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

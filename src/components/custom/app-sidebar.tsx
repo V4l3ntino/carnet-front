@@ -140,14 +140,18 @@ export function AppSidebar() {
                         <SidebarMenuSub>
                           <SidebarMenuSubItem>
                             <SidebarMenuSubButton asChild>
-                              <a href="#ver-incidencias">Ver</a>
+                              <Link href={"/incidencias"}>Incidencias CRUD</Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
-                          <SidebarMenuSubItem>
-                            <SidebarMenuSubButton asChild>
-                              <a href="#crear-incidencias">Crear/Actualizar</a>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
+                          {
+                            userInfo.permisos?.find((item) => item.tipo == "r")?.tipo_incidencia ? (
+                              <SidebarMenuSubItem>
+                                <SidebarMenuSubButton asChild>
+                                  <a href="#crear-incidencias">Tipo incidencias</a>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ) : (``)
+                          }
                         </SidebarMenuSub>
                       </CollapsibleContent>
                     </SidebarMenuItem>

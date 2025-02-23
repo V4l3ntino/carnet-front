@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <MobileMenuButton />
                     <AppSidebar />
                     <SidebarInset>
-                        <main className="mt-3 ml-2">{children}</main>
+                        <main className="mt-3 ml-2 p-10">{children}</main>
                     </SidebarInset>
                 </SidebarProvider>
             </AuthProvider>
