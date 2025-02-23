@@ -81,16 +81,11 @@ const breadCumbs = [
   {
     name: "Home",
     url: "/"
-  },
-  {
-    name: "Incidencias",
-    url: "/"
   }
 ]
 
 export default function Dashboard() {
   const { accessToken, userInfo } = useAuthContext()
-  console.log(userInfo)
   return (
     <div className="md:p-6 p-4">
       <h1 className="text-xl font-medium mb-4">Dashboard</h1>

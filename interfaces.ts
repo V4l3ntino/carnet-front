@@ -132,7 +132,7 @@ export interface decodeJWT {
   email: string,
   avatar: string,
   rolname: string,
-  permisos: permisoTablas
+  permisos: permisoTablas[]
 }
 
 interface permisoTablas {

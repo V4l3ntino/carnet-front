@@ -35,7 +35,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const token = Cookies.get('accessToken');
         if (token) {
             try {
-                console.log("Token decode", token)
                 setAccessToken(token)
                 const decoded: decodeJWT = jwtDecode(token);
                 console.log(decoded)

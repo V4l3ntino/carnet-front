@@ -72,7 +72,7 @@ export default function AccountPage() {
       setError("An error occurred. Please try again.")
     }
   }
-
+  
   return (
     <div className="container mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold text-center mb-2">Mi Perfil</h1>
@@ -80,7 +80,7 @@ export default function AccountPage() {
 
       <div className="grid gap-8 md:grid-cols-[300px_1fr] max-w-4xl mx-auto">
         <div className="space-y-6">
-          <div className="relative mx-auto">
+          <div className="relative mx-auto flex justify-center">
             <div
               className="w-[200px] h-[200px] rounded-full bg-muted relative cursor-pointer overflow-hidden"
               onClick={handleImageClick}
@@ -137,7 +137,10 @@ export default function AccountPage() {
 
             <div className="space-y-2">
               <Label htmlFor="fullname">Nombre completo</Label>
-              <Input id="fullname" name="fullName" defaultValue={userInfo?.fullName} />
+              <Input id="fullname" name="fullName" defaultValue={userInfo?.fullName}
+                pattern="^(?=.{1,30}$)(?!.*_)([A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ]*) ([A-ZÀ-ÖØ-Ý][A-Za-zÀ-ÖØ-öø-ÿ]*)$"
+                title="Escribe el nombre y apellido separados por un espacio, sin guiones bajos, con el primer carácter en mayúscula y máximo 30 caracteres."
+              />
             </div>
 
             <div className="space-y-2">

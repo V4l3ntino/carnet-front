@@ -114,86 +114,96 @@ export function AppSidebar() {
                   tooltip="Dashboard"
                   className="group-data-[collapsible=icon]:justify-center"
                 >
-                  <a href="#dashboard">
+                  <Link href={"/"}>
                     <LayoutDashboard className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
                     <span className="group-data-[collapsible=icon]:hidden">Dashboard</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               {/* Incidencias */}
-              <Collapsible>
-                <SidebarMenuItem className="flex flex-col">
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      className="w-full group group-data-[collapsible=icon]:justify-center"
-                      tooltip="Incidencias"
-                    >
-                      <AlertCircle className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
-                      <span className="group-data-[collapsible=icon]:hidden">Incidencias</span>
-                      <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90 group-data-[collapsible=icon]:hidden" />
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild>
-                          <a href="#ver-incidencias">Ver</a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild>
-                          <a href="#crear-incidencias">Crear/Actualizar</a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </SidebarMenuItem>
-              </Collapsible>
+              {
+                userInfo?.permisos?.find((item) => item.tipo == "r")?.incidencia ? (
+                  <Collapsible>
+                    <SidebarMenuItem className="flex flex-col">
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton
+                          className="w-full group group-data-[collapsible=icon]:justify-center"
+                          tooltip="Incidencias"
+                        >
+                          <AlertCircle className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
+                          <span className="group-data-[collapsible=icon]:hidden">Incidencias</span>
+                          <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90 group-data-[collapsible=icon]:hidden" />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          <SidebarMenuSubItem>
+                            <SidebarMenuSubButton asChild>
+                              <a href="#ver-incidencias">Ver</a>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                          <SidebarMenuSubItem>
+                            <SidebarMenuSubButton asChild>
+                              <a href="#crear-incidencias">Crear/Actualizar</a>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </SidebarMenuItem>
+                  </Collapsible>
+                ) : (``)
+              }
+
 
               {/* Faltas */}
-              <Collapsible>
-                <SidebarMenuItem className="flex flex-col">
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton
-                      className="w-full group group-data-[collapsible=icon]:justify-center"
-                      tooltip="Faltas"
-                    >
-                      <FileWarning className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
-                      <span className="group-data-[collapsible=icon]:hidden">Faltas</span>
-                      <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90 group-data-[collapsible=icon]:hidden" />
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild>
-                          <a href="#ver-faltas">Ver</a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild>
-                          <a href="#crear-faltas">Crear/Actualizar</a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </SidebarMenuItem>
-              </Collapsible>
+              {userInfo?.permisos?.find((item) => item.tipo == "r")?.incidencia ? (
+                <Collapsible>
+                  <SidebarMenuItem className="flex flex-col">
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton
+                        className="w-full group group-data-[collapsible=icon]:justify-center"
+                        tooltip="Faltas"
+                      >
+                        <FileWarning className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
+                        <span className="group-data-[collapsible=icon]:hidden">Faltas</span>
+                        <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90 group-data-[collapsible=icon]:hidden" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton asChild>
+                            <a href="#ver-faltas">Ver</a>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton asChild>
+                            <a href="#crear-faltas">Crear/Actualizar</a>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
+              ) : (``)}
 
               {/* Settings */}
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  tooltip="Settings"
-                  className="group-data-[collapsible=icon]:justify-center"
-                >
-                  <a href="#settings">
-                    <Settings className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
-                    <span className="group-data-[collapsible=icon]:hidden">Settings</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {userInfo?.permisos?.find((item) => item.tipo == "r")?.incidencia ? (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip="Settings"
+                    className="group-data-[collapsible=icon]:justify-center"
+                  >
+                    <a href="#settings">
+                      <Settings className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
+                      <span className="group-data-[collapsible=icon]:hidden">Settings</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ) : (``)}
+
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -207,7 +217,7 @@ export function AppSidebar() {
             >
               <Avatar>
                 <AvatarImage src={`${userInfo?.avatar}`} />
-                <AvatarFallback>{userInfo?.fullName.split(' ')[0].substring(0,1)}{userInfo?.fullName.split(' ')[1].substring(0,1)}</AvatarFallback>
+                <AvatarFallback>{userInfo?.fullName.split(' ')[0].substring(0, 1)}{userInfo?.fullName.split(' ')[1].substring(0, 1)}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col gap-0.5 group-data-[collapsible=icon]:hidden">
                 <span className="font-medium"> {userInfo?.fullName}</span>
@@ -236,7 +246,7 @@ export function AppSidebar() {
               Notifications
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-600" onClick={() => {Cookies.remove('accessToken'); router.push("/login")}}>
+            <DropdownMenuItem className="text-red-600" onClick={() => { Cookies.remove('accessToken'); router.push("/login") }}>
               <LogOut className="mr-2 h-4 w-4" />
               Log out
             </DropdownMenuItem>
