@@ -129,6 +129,8 @@ export interface decodeJWT {
   sub: string,
   username: string,
   fullName: string,
+  email: string,
+  avatar: string,
   rolname: string,
   permisos: permisoTablas
 }

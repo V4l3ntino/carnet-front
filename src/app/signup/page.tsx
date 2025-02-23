@@ -31,12 +31,17 @@ export default function SignUpPage() {
 
     const formData = new FormData(event.currentTarget)
 
+    // Combine firstName and surname to create fullName
+    const firstName = (formData.get("firstName") as string).trim()
+    const surname = (formData.get("surname") as string).trim()
+    const fullName = `${firstName} ${surname}`.trim()
+
     const signUpData: SignUpData = {
       uuid: uuidv4(),
       username: formData.get("username") as string,
       password: formData.get("password") as string,
       permiso: "0",
-      fullName: formData.get("fullName") as string,
+      fullName,
       email: formData.get("email") as string,
     }
 
@@ -79,13 +84,24 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            <div>
-              <Label htmlFor="fullName">Full Name</Label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <AtSignIcon className="h-5 w-5 text-gray-400" />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="firstName">First Name</Label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <AtSignIcon className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <Input id="firstName" name="firstName" type="text" required className="pl-10" placeholder="John" />
                 </div>
-                <Input id="fullName" name="fullName" type="text" required className="pl-10" placeholder="John Doe" />
+              </div>
+              <div>
+                <Label htmlFor="surname">Surname</Label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <AtSignIcon className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <Input id="surname" name="surname" type="text" required className="pl-10" placeholder="Doe" />
+                </div>
               </div>
             </div>
 
@@ -128,7 +144,7 @@ export default function SignUpPage() {
               Create Account
             </Button>
 
-            <Button type="button" variant="outline" onClick={() => router.push("/login")} className="w-full">
+            <Button type="button" variant="outline" onClick={() => router.push("/")} className="w-full">
               Back to Login
             </Button>
           </div>

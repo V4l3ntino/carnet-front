@@ -5,6 +5,7 @@ import { decodeJWT } from '../../interfaces';
 // Define el tipo del contexto
 interface ContextType {
   accessToken: string,
+  setAccessToken: (token: string) => void,
   userInfo: decodeJWT | null
 }
 

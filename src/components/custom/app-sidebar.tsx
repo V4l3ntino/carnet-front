@@ -46,6 +46,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { useAuthContext } from "@/context/AuthContext"
 import Cookies from 'js-cookie';
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 
 export function AppSidebar() {
@@ -205,12 +206,14 @@ export function AppSidebar() {
               className="group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2"
             >
               <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarImage src={`${userInfo?.avatar}`} />
+                <AvatarFallback>{userInfo?.fullName.split(' ')[0].substring(0,1)}{userInfo?.fullName.split(' ')[1].substring(0,1)}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col gap-0.5 group-data-[collapsible=icon]:hidden">
-                <span className="font-medium">  {userInfo?.username} </span>
-                <span className="text-xs text-muted-foreground">m@example.com</span>
+                <span className="font-medium"> {userInfo?.fullName}</span>
+                <span className="text-xs text-muted-foreground">
+                  {userInfo?.username}
+                </span>
               </div>
               <ChevronDown className="ml-auto h-4 w-4 group-data-[collapsible=icon]:hidden" />
             </SidebarMenuButton>
@@ -222,7 +225,7 @@ export function AppSidebar() {
             </DropdownMenuItem>
             <DropdownMenuItem>
               <User className="mr-2 h-4 w-4" />
-              Account
+              <Link href={"/account"}>Account</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <CreditCard className="mr-2 h-4 w-4" />
