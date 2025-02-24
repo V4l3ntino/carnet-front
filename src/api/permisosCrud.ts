@@ -3,7 +3,7 @@ import { Alumno, Incidencia, IncidenciaEmmit, Profesor, TipoIncidencia, User } f
 import { IncidenciaTable } from "../../types/incidencias"
 import { toast } from "sonner"
 
-export const saveRol = async (rol:Role): Promise<void> => {
+export const savePerm = async (rol:Role): Promise<void> => {
     try {
         const tabla: Permission[] = rol.tabla;
         
@@ -26,6 +26,24 @@ export const saveRol = async (rol:Role): Promise<void> => {
         // Esperar a que todas las peticiones se completen
         const results = await Promise.all(requests);
         
+      } catch (error) {
+        console.error("Error en saveIncidencia:", error);
+        throw new Error(`Fallaron ${error}`);
+      }
+}
+
+export const saveRol = async (rol:Role): Promise<void> => {
+    try {
+        console.log("INSERTANDO",rol)
+        // Crear array de promesas para ejecutar en paralelo
+        const result = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/permisos/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(rol)
+        })
+      
+        const resultData = await result.json()
+        console.log(resultData)
       } catch (error) {
         console.error("Error en saveIncidencia:", error);
         throw new Error(`Fallaron ${error}`);

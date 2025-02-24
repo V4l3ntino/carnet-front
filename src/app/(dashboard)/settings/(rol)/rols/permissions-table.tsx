@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import type { Permission, Role } from "./types"
 import { useItemContext } from "@/context/itemsContext/ItemContext"
-import { saveRol } from "@/api/permisosCrud"
+import { savePerm, saveRol } from "@/api/permisosCrud"
 import { v4 as uuidv4 } from "uuid"
 
 
@@ -62,7 +62,7 @@ export default function PermissionsTable({ initialRoles }: { initialRoles: Role[
     if (rolUpdate) {
       try {
 
-        saveRol(rolUpdate)
+        savePerm(rolUpdate)
       } catch (error) {
         console.log(error)
       }
@@ -79,10 +79,10 @@ export default function PermissionsTable({ initialRoles }: { initialRoles: Role[
     )
   }
 
-  const createNewRole = () => {
+  const createNewRole = async() => {
     if (!newRoleName.trim()) return
 
-    const newRoleId = String(Math.max(...roles.map((r) => Number(r.id))) + 1)
+    const newRoleId = uuidv4()
 
     // Create permissions for each type (r,w,i,d)
     const newPermissions: Permission[] = ["r", "w", "i", "d"].map((tipo, index) => ({
@@ -101,6 +101,7 @@ export default function PermissionsTable({ initialRoles }: { initialRoles: Role[
       cuenta_puntos: selectedColumns.includes("cuenta_puntos"),
       retrasos: selectedColumns.includes("retrasos"),
       grupo: selectedColumns.includes("grupo"),
+      permiso_id: newRoleId
     }))
 
     const newRole: Role = {
@@ -109,6 +110,8 @@ export default function PermissionsTable({ initialRoles }: { initialRoles: Role[
       descripcion: newRoleDescription,
       tabla: newPermissions,
     }
+    
+    await saveRol(newRole)
 
     setRoles((current) => [...current, newRole])
     setSelectedRole(newRoleId)

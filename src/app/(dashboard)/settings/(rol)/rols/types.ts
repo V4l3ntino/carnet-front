@@ -14,6 +14,7 @@ export interface Permission {
     cuenta_puntos: boolean
     retrasos: boolean
     grupo: boolean
+    permiso_id?: string
   }
   
   export interface Role {
