@@ -194,18 +194,35 @@ export function AppSidebar() {
 
               {/* Settings */}
               {userInfo?.permisos?.find((item) => item.tipo == "r")?.incidencia ? (
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    asChild
-                    tooltip="Settings"
-                    className="group-data-[collapsible=icon]:justify-center"
-                  >
-                    <a href="#settings">
-                      <Settings className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
-                      <span className="group-data-[collapsible=icon]:hidden">Settings</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <Collapsible>
+                  <SidebarMenuItem className="flex flex-col">
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton
+                        className="w-full group group-data-[collapsible=icon]:justify-center"
+                        tooltip="Settings"
+                      >
+                        <Settings className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
+                        <span className="group-data-[collapsible=icon]:hidden">Settings</span>
+                        <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90 group-data-[collapsible=icon]:hidden" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+
+                        {
+                          userInfo.permisos.find((item) => item.tipo == "r")?.permisos ? (
+                            <SidebarMenuSubItem>
+                              <SidebarMenuSubButton asChild>
+                                <a href="#ver-faltas">Configurar Roles</a>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ) : (``)
+                        }
+
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
               ) : (``)}
 
             </SidebarMenu>

@@ -9,6 +9,8 @@ import { getAllGrados } from "../../api/gradosCrud";
 import { getAllAlumnos } from "../../api/alumnosCrud";
 import { IncidenciaTable, SeverityLevel } from "../../../types/incidencias";
 import { io, Socket } from "socket.io-client";
+import { Role } from "@/app/(dashboard)/settings/(rol)/rols/types";
+import { getAllRols } from "@/api/permisosCrud";
 
 
 
@@ -19,6 +21,7 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [incidenciasTable, setIncidenciasTable] = useState<IncidenciaTable[]>([])
     const [newIncidenciaTable, setNewIncidenciaTable] = useState<IncidenciaTable>()
     const [deleteIncidenciaId, setDeleteincidenciaId] = useState<string>("")
+    const [roles, setRoles] = useState<Role[]>([])
 
     const [tipoIncidencias, setTipoIncidencias] = useState<TipoIncidencia[]>([])
     const [grados, setGrados] = useState<Grado[]>([])
@@ -81,6 +84,12 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setAlumnos(alumnosReq)
         }
     }
+    async function fetchRols() {
+        const rolReq = await getAllRols()
+        if (rolReq) {
+            setRoles(rolReq)
+        }
+    }
 
 
 
@@ -89,6 +98,7 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
         fetchTipoIncidencias()
         fetchGrados()
         fetchAlumnos()
+        fetchRols()
         // Conecta al servidor WebSocket
         const socketInstance = io("http://192.168.0.103:3000");
 
@@ -124,7 +134,8 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
             alumnos,
             incidenciasTable,
             newIncidenciaTable,
-            deleteIncidenciaId
+            deleteIncidenciaId,
+            rolList: roles
         }}>
             {children}
         </ItemContext.Provider>
