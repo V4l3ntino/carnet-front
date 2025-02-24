@@ -13,7 +13,7 @@ export default function Page() {
   const {userInfo} = useAuthContext()
   const router = useRouter()
     useEffect(() => {
-      if(!userInfo?.permisos.find((item) => item.tipo == "r")?.permisos){
+      if(userInfo && !userInfo?.permisos.find((item) => item.tipo == "r")?.permisos){
         router.push("/")
       }
     },[userInfo])

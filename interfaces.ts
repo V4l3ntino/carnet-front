@@ -36,6 +36,23 @@ export interface User {
   profile: Profile;
 }
 
+export interface UserGQL {
+  id: string;
+  username: string;
+  email: string;
+  profile: ProfileGQL;
+  permiso: PermisoGQL;
+}
+
+interface PermisoGQL {
+  nombre: string;
+  id: string;
+}
+
+interface ProfileGQL {
+  fullName: string;
+}
+
 
 export interface CuentaPuntos {
   id: string;

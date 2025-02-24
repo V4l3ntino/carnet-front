@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ItemContext } from "./ItemContext";
-import { Alumno, Grado, Incidencia, TipoIncidencia } from "../../../interfaces";
+import { Alumno, Grado, Incidencia, TipoIncidencia, UserGQL } from "../../../interfaces";
 import { getAllIncidencia } from "../../api/incidenciasCrud";
 import { getAllTipoIncidencias } from "../../api/tipoIncidenciasCrud";
 import { getAllGrados } from "../../api/gradosCrud";
@@ -27,6 +27,8 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [tipoIncidencias, setTipoIncidencias] = useState<TipoIncidencia[]>([])
     const [grados, setGrados] = useState<Grado[]>([])
     const [alumnos, setAlumnos] = useState<Alumno[]>([])
+
+    const [users, setUsers] = useState<UserGQL[]>([])
 
 
     const [socket, setSocket] = useState<Socket | null>(null);
@@ -92,12 +94,43 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }
 
-    const aplyRoles = async() => {
-        if(socket){
+    async function fetchUserGQL() {
+        const request = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/graphql`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                query: `
+                query GetUsers {
+                    getUsers {
+                    id
+                    username
+                    email
+                    profile {
+                        fullName
+                    }
+                    permiso {
+                        nombre
+                        id
+                    }
+                    }
+                }
+            `
+            })
+        })
+        const data = await request.json()
+        setUsers(data.data.getUsers)
+    }
+
+    const aplyRoles = async () => {
+        if (socket) {
             socket.emit("aplicarRoles")
-            toast.success("Cambios aplicados con éxito!")          
+            toast.success("Cambios aplicados con éxito!")
         }
     }
+
+
 
     useEffect(() => {
         fetchIncidencias()
@@ -105,6 +138,7 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
         fetchGrados()
         fetchAlumnos()
         fetchRols()
+        fetchUserGQL()
         // Conecta al servidor WebSocket
         const socketInstance = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`);
 
@@ -129,7 +163,7 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
         socketInstance.on("incidenciaDelete", (id: string) => {
             setDeleteincidenciaId(id)
         })
-        
+
 
     }, [])
 
@@ -143,7 +177,8 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
             newIncidenciaTable,
             deleteIncidenciaId,
             rolList: roles,
-            aplyRoles
+            aplyRoles,
+            users
         }}>
             {children}
         </ItemContext.Provider>

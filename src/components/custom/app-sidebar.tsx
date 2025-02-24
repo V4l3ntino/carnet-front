@@ -14,6 +14,7 @@ import {
   Sparkles,
   Sun,
   User,
+  User2Icon,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -159,8 +160,20 @@ export function AppSidebar() {
                 ) : (``)
               }
 
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  tooltip="Dashboard"
+                  className="group-data-[collapsible=icon]:justify-center"
+                >
+                  <Link href={"/users"}>
+                    <User2Icon className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
+                    <span className="group-data-[collapsible=icon]:hidden">Usuarios</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
 
-              {/* Faltas */}
+              {/* Faltas 
               {userInfo?.permisos?.find((item) => item.tipo == "r")?.incidencia ? (
                 <Collapsible>
                   <SidebarMenuItem className="flex flex-col">
@@ -191,6 +204,7 @@ export function AppSidebar() {
                   </SidebarMenuItem>
                 </Collapsible>
               ) : (``)}
+              */}
 
               {/* Settings */}
               {userInfo?.permisos?.find((item) => item.tipo == "r")?.permisos ? (

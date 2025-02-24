@@ -46,10 +46,11 @@ export default function IncidenciasPage() {
   useEffect(() => { console.log(data) }, [data])
 
   useEffect(() => {
-    if(!userInfo?.permisos.find((item) => item.tipo == "r")?.incidencia){
+    if(userInfo && !userInfo?.permisos.find((item) => item.tipo == "r")?.incidencia){
       router.push("/")
     }
   },[userInfo])
+
 
   useEffect(() => {
     if (newIncidenciaTable) {
@@ -319,7 +320,7 @@ export default function IncidenciasPage() {
                         <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                       ))}
                       {
-                        userInfo?.permisos.find((item) => item.tipo == "w")?.incidencia ? (
+                        userInfo && userInfo?.permisos.find((item) => item.tipo == "w")?.incidencia ? (
                           <TableCell>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
@@ -333,7 +334,7 @@ export default function IncidenciasPage() {
                                   Editar
                                 </DropdownMenuItem>
                                 {
-                                  userInfo?.permisos.find((item) => item.tipo == "d")?.incidencia ? (
+                                  userInfo && userInfo?.permisos.find((item) => item.tipo == "d")?.incidencia ? (
                                     <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(row.original.id)}>
                                       <Trash className="mr-2 h-4 w-4" />
                                       Eliminar

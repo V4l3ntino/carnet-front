@@ -1,6 +1,6 @@
 'use client'
 import React, { createContext, useContext } from 'react';
-import { Alumno, decodeJWT, Grado, Incidencia, TipoIncidencia } from '../../../interfaces';
+import { Alumno, decodeJWT, Grado, Incidencia, TipoIncidencia, UserGQL } from '../../../interfaces';
 import { IncidenciaTable } from '../../../types/incidencias';
 import { Role } from '@/app/(dashboard)/settings/(rol)/rols/types';
 
@@ -17,6 +17,8 @@ interface ContextType {
   incidenciasTable: IncidenciaTable[]
   newIncidenciaTable: IncidenciaTable | undefined
   deleteIncidenciaId: string
+
+  users: UserGQL[]
 }
 
 export const ItemContext = createContext<ContextType | undefined>(undefined);

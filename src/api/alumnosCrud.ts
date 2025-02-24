@@ -1,4 +1,4 @@
-import { Alumno } from "../interfaces"
+import { Alumno } from "../../interfaces"
 
 export const getAllAlumnos = async(): Promise<Alumno[] | undefined> => {
 
