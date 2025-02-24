@@ -34,6 +34,7 @@ import { v4 as uuidv4 } from "uuid"
 import { deleteIncidencia, saveIncidencia } from "../../../api/incidenciasCrud"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { BreadcrumbWithCustomSeparator } from "@/components/custom/breadcumps"
 
 
 export default function IncidenciasPage() {
@@ -46,10 +47,10 @@ export default function IncidenciasPage() {
   useEffect(() => { console.log(data) }, [data])
 
   useEffect(() => {
-    if(userInfo && !userInfo?.permisos.find((item) => item.tipo == "r")?.incidencia){
+    if (userInfo && !userInfo?.permisos.find((item) => item.tipo == "r")?.incidencia) {
       router.push("/")
     }
-  },[userInfo])
+  }, [userInfo])
 
 
   useEffect(() => {
@@ -232,148 +233,159 @@ export default function IncidenciasPage() {
     setIsDialogOpen(true)
   }
 
+  const breadCumbs = [
+    {
+      name: "Home",
+      url: "/"
+    },
+    {
+      name: "Incidencias",
+      url: "/incidencias"
+    }
+  ]
+
+
   return (
-    <div className="h-full w-full space-y-4 p-4">
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <Input
-            placeholder="Filtrar por descripción..."
-            value={(table.getColumn("descripcion")?.getFilterValue() as string) ?? ""}
-            onChange={(event) => table.getColumn("descripcion")?.setFilterValue(event.target.value)}
-            className="w-full sm:max-w-xs"
-          />
-          <div className="flex flex-1 gap-2 sm:justify-end">
-            <Button
-              onClick={() => {
-                setEditingIncidencia(null)
-                setIsDialogOpen(true)
-              }}
-              className="w-full sm:w-auto"
-            >
-              <Plus className="mr-2 h-4 w-4" />
-              Nueva Incidencia
-            </Button>
-
-            <div className="hidden md:block">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="ml-auto">
-                    Columnas <ChevronDown className="ml-2 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {table
-                    .getAllColumns()
-                    .filter((column) => column.getCanHide())
-                    .map((column) => {
-                      return (
-                        <DropdownMenuCheckboxItem
-                          key={column.id}
-                          className="capitalize"
-                          checked={column.getIsVisible()}
-                          onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                        >
-                          {column.id}
-                        </DropdownMenuCheckboxItem>
-                      )
-                    })}
-                </DropdownMenuContent>
-              </DropdownMenu>
+    <>
+      <BreadcrumbWithCustomSeparator items={breadCumbs} />
+      <div className="h-full w-full space-y-4 p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <Input
+              placeholder="Filtrar por descripción..."
+              value={(table.getColumn("descripcion")?.getFilterValue() as string) ?? ""}
+              onChange={(event) => table.getColumn("descripcion")?.setFilterValue(event.target.value)}
+              className="w-full sm:max-w-xs"
+            />
+            <div className="flex flex-1 gap-2 sm:justify-end">
+              <Button
+                onClick={() => {
+                  setEditingIncidencia(null)
+                  setIsDialogOpen(true)
+                }}
+                className="w-full sm:w-auto"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Nueva Incidencia
+              </Button>
+              <div className="hidden md:block">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="ml-auto">
+                      Columnas <ChevronDown className="ml-2 h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    {table
+                      .getAllColumns()
+                      .filter((column) => column.getCanHide())
+                      .map((column) => {
+                        return (
+                          <DropdownMenuCheckboxItem
+                            key={column.id}
+                            className="capitalize"
+                            checked={column.getIsVisible()}
+                            onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                          >
+                            {column.id}
+                          </DropdownMenuCheckboxItem>
+                        )
+                      })}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="space-y-4">
-          {/* Mobile View */}
-          <div className="block md:hidden space-y-4">
-            {table.getRowModel().rows.map((row) => (
-              <MobileIncidenciaCard
-                key={row.original.id}
-                incidencia={row.original}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
-            ))}
-            <MobilePagination table={table} />
-          </div>
-
-          {/* Desktop View */}
-          <div className="hidden md:block rounded-md border">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                      </TableHead>
-                    ))}
-                    <TableHead className="w-[50px]">Acciones</TableHead>
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+          <div className="space-y-4">
+            {/* Mobile View */}
+            <div className="block md:hidden space-y-4">
+              {table.getRowModel().rows.map((row) => (
+                <MobileIncidenciaCard
+                  key={row.original.id}
+                  incidencia={row.original}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+              ))}
+              <MobilePagination table={table} />
+            </div>
+            {/* Desktop View */}
+            <div className="hidden md:block rounded-md border">
+              <Table>
+                <TableHeader>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                        </TableHead>
                       ))}
-                      {
-                        userInfo && userInfo?.permisos.find((item) => item.tipo == "w")?.incidencia ? (
-                          <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                  <MoreHorizontal className="h-4 w-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => handleEdit(row.original)}>
-                                  <Edit className="mr-2 h-4 w-4" />
-                                  Editar
-                                </DropdownMenuItem>
-                                {
-                                  userInfo && userInfo?.permisos.find((item) => item.tipo == "d")?.incidencia ? (
-                                    <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(row.original.id)}>
-                                      <Trash className="mr-2 h-4 w-4" />
-                                      Eliminar
-                                    </DropdownMenuItem>
-                                  ) : (``)
-                                }
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        ) : (``)
-                      }
+                      <TableHead className="w-[50px]">Acciones</TableHead>
                     </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={columns.length + 1} className="h-24 text-center">
-                      No hay resultados.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-            <div className="border-t p-4">
-              <DataTablePagination table={table} />
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((row) => (
+                      <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                        ))}
+                        {
+                          userInfo && userInfo?.permisos.find((item) => item.tipo == "w")?.incidencia ? (
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" className="h-8 w-8 p-0">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem onClick={() => handleEdit(row.original)}>
+                                    <Edit className="mr-2 h-4 w-4" />
+                                    Editar
+                                  </DropdownMenuItem>
+                                  {
+                                    userInfo && userInfo?.permisos.find((item) => item.tipo == "d")?.incidencia ? (
+                                      <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(row.original.id)}>
+                                        <Trash className="mr-2 h-4 w-4" />
+                                        Eliminar
+                                      </DropdownMenuItem>
+                                    ) : (``)
+                                  }
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          ) : (``)
+                        }
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={columns.length + 1} className="h-24 text-center">
+                        No hay resultados.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+              <div className="border-t p-4">
+                <DataTablePagination table={table} />
+              </div>
             </div>
           </div>
         </div>
+        <IncidenciaDialog
+          open={isDialogOpen}
+          onOpenChange={(open) => {
+            setIsDialogOpen(open)
+            if (!open) setEditingIncidencia(null)
+          }}
+          onSubmit={editingIncidencia ? handleUpdate : handleCreate}
+          defaultValues={editingIncidencia || undefined}
+        />
       </div>
-
-      <IncidenciaDialog
-        open={isDialogOpen}
-        onOpenChange={(open) => {
-          setIsDialogOpen(open)
-          if (!open) setEditingIncidencia(null)
-        }}
-        onSubmit={editingIncidencia ? handleUpdate : handleCreate}
-        defaultValues={editingIncidencia || undefined}
-      />
-    </div>
+    </>
   )
 }
 

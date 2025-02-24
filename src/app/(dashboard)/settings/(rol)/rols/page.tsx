@@ -5,6 +5,7 @@ import { Role } from "./types"
 import { useAuthContext } from "@/context/AuthContext"
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { BreadcrumbWithCustomSeparator } from "@/components/custom/breadcumps"
 
 // Datos de ejemplo incluyendo el rol de Administrador
 
@@ -17,13 +18,26 @@ export default function Page() {
         router.push("/")
       }
     },[userInfo])
+    const breadCumbs = [
+      {
+        name: "Home",
+        url: "/"
+      },
+      {
+        name: "Permisos",
+        url: "/settings/rols"
+      }
+    ]
   
   return (
-    <div className="container mx-auto py-10">
-      {rolList.length > 0 ? (
-        <PermissionsTable initialRoles={rolList} />
-      ) : (`Cargando...`)}
-    </div>
+    <>
+      <BreadcrumbWithCustomSeparator items={breadCumbs}/>
+      <div className="container mx-auto py-10">
+        {rolList.length > 0 ? (
+          <PermissionsTable initialRoles={rolList} />
+        ) : (`Cargando...`)}
+      </div>
+    </>
   )
 }
 

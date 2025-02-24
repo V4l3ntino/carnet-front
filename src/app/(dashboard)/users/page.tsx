@@ -25,6 +25,7 @@ import { MobileUserCard } from "./mobile-user-card"
 import { useRouter } from "next/navigation"
 import { EditRoleDialog } from "./edit-role-dialog"
 import { useItemContext } from "@/context/itemsContext/ItemContext"
+import { BreadcrumbWithCustomSeparator } from "@/components/custom/breadcumps"
 
 interface UserPermission {
   id: string
@@ -104,7 +105,7 @@ const sampleUsers: User[] = [
 ]
 
 export default function UsersTable() {
-  const {users} = useItemContext()
+  const {users, aplyRoles} = useItemContext()
   const [data, setData] = useState<User[]>(users)
 
   useEffect(() => {
@@ -172,7 +173,7 @@ export default function UsersTable() {
       } catch (error) {
         console.error("Error al decodificar el token ", error)
       }
-  
+      aplyRoles()
       
       // Close the dialog
       setEditingUser(null)
@@ -288,169 +289,181 @@ export default function UsersTable() {
   const handleDelete = (id: string) => {
     console.log("Delete user:", id)
   }
+  const breadCumbs = [
+    {
+      name: "Home",
+      url: "/"
+    },
+    {
+      name: "User",
+      url: "/users"
+    }
+  ]
+  
 
   return (
-    <div className="h-full w-full space-y-4 p-4">
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
-          <Input
-            placeholder="Filter by username..."
-            value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
-            onChange={(event) => table.getColumn("username")?.setFilterValue(event.target.value)}
-            className="max-w-xs"
-          />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-
-        {/* Mobile View */}
-        <div className="block md:hidden space-y-4">
-          {table.getRowModel().rows.map((row) => (
-            <MobileUserCard
-              key={row.original.id}
-              user={row.original}
-              onEditRole={handleEditRole}
-              onDelete={handleDelete}
+    <>
+      <BreadcrumbWithCustomSeparator items={breadCumbs}/>
+      <div className="h-full w-full space-y-4 p-4">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <Input
+              placeholder="Filter by username..."
+              value={(table.getColumn("username")?.getFilterValue() as string) ?? ""}
+              onChange={(event) => table.getColumn("username")?.setFilterValue(event.target.value)}
+              className="max-w-xs"
             />
-          ))}
-        </div>
-
-        {/* Desktop View */}
-        <div className="hidden md:block rounded-md border">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  ))}
-                  <TableHead className="w-[80px]">Actions</TableHead>
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                  Columns <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    )
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          {/* Mobile View */}
+          <div className="block md:hidden space-y-4">
+            {table.getRowModel().rows.map((row) => (
+              <MobileUserCard
+                key={row.original.id}
+                user={row.original}
+                onEditRole={handleEditRole}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+          {/* Desktop View */}
+          <div className="hidden md:block rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      </TableHead>
                     ))}
-                    <TableCell>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" className="h-8 w-8 p-0">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => handleEditRole(row.original)}>
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit Role
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() =>
-                              router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/users/${row.original.id}`)
-                            }
-                          >
-                            <Eye className="mr-2 h-4 w-4" />
-                            View Detail
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-600">
-                            <Trash className="mr-2 h-4 w-4" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                    <TableHead className="w-[80px]">Actions</TableHead>
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                      ))}
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => handleEditRole(row.original)}>
+                              <Edit className="mr-2 h-4 w-4" />
+                              Edit Role
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() =>
+                                router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/users/${row.original.id}`)
+                              }
+                            >
+                              <Eye className="mr-2 h-4 w-4" />
+                              View Detail
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-600">
+                              <Trash className="mr-2 h-4 w-4" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={columns.length + 1} className="h-24 text-center">
+                      No results.
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length + 1} className="h-24 text-center">
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-          <div className="border-t p-4">
-            <div className="flex items-center justify-between px-2">
-              <div className="flex-1 text-sm text-muted-foreground">
-                {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
-                selected.
-              </div>
-              <div className="flex items-center gap-6">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">Rows per page</span>
-                  <select
-                    value={table.getState().pagination.pageSize}
-                    onChange={(e) => {
-                      table.setPageSize(Number(e.target.value))
-                    }}
-                    className="h-8 w-[70px] rounded-md border border-input bg-background px-2 py-1 text-sm"
-                  >
-                    {[10, 20, 30, 40, 50].map((pageSize) => (
-                      <option key={pageSize} value={pageSize}>
-                        {pageSize}
-                      </option>
-                    ))}
-                  </select>
+                )}
+              </TableBody>
+            </Table>
+            <div className="border-t p-4">
+              <div className="flex items-center justify-between px-2">
+                <div className="flex-1 text-sm text-muted-foreground">
+                  {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s)
+                  selected.
                 </div>
-                <div className="flex items-center gap-2 text-sm">
-                  Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-                  <Button
-                    variant="outline"
-                    className="h-8 w-8 p-0"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                  >
-                    {"<"}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="h-8 w-8 p-0"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                  >
-                    {">"}
-                  </Button>
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">Rows per page</span>
+                    <select
+                      value={table.getState().pagination.pageSize}
+                      onChange={(e) => {
+                        table.setPageSize(Number(e.target.value))
+                      }}
+                      className="h-8 w-[70px] rounded-md border border-input bg-background px-2 py-1 text-sm"
+                    >
+                      {[10, 20, 30, 40, 50].map((pageSize) => (
+                        <option key={pageSize} value={pageSize}>
+                          {pageSize}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+                    <Button
+                      variant="outline"
+                      className="h-8 w-8 p-0"
+                      onClick={() => table.previousPage()}
+                      disabled={!table.getCanPreviousPage()}
+                    >
+                      {"<"}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-8 w-8 p-0"
+                      onClick={() => table.nextPage()}
+                      disabled={!table.getCanNextPage()}
+                    >
+                      {">"}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <EditRoleDialog
+          open={isEditRoleOpen}
+          onOpenChange={setIsEditRoleOpen}
+          currentRole={editingUser?.permiso.nombre || ""}
+          onSubmit={handleRoleChange}
+        />
       </div>
-      <EditRoleDialog
-        open={isEditRoleOpen}
-        onOpenChange={setIsEditRoleOpen}
-        currentRole={editingUser?.permiso.nombre || ""}
-        onSubmit={handleRoleChange}
-      />
-    </div>
+    </>
   )
 }
 
