@@ -129,7 +129,7 @@ export default function UsersTable() {
     setIsEditRoleOpen(true)
   }
 
-  const handleRoleChange = async (newRole: string) => {
+  const handleRoleChange = async (newRole: string, rolName: string) => {
     if (!editingUser) return
 
     try {
@@ -144,12 +144,35 @@ export default function UsersTable() {
                 ...user,
                 permiso: {
                   ...user.permiso,
-                  nombre: newRole,
+                  nombre: rolName,
                 },
               }
             : user,
         ),
       )
+
+      try {
+        const data = {
+          rolId: newRole
+        }
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${editingUser.id}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        })
+  
+        const dataJson = await response.json()
+        if (!response.ok) {
+          console.log(dataJson.message)
+          return
+        }
+        console.log("petición de update",dataJson)
+        // toast.info("Se han aplicado nuevos cambios en los permisos")
+  
+      } catch (error) {
+        console.error("Error al decodificar el token ", error)
+      }
+  
       
       // Close the dialog
       setEditingUser(null)

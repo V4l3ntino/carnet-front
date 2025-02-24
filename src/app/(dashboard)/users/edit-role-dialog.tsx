@@ -1,12 +1,15 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useEffect, useState } from "react"
+import { Role } from "../settings/(rol)/rols/types"
+import { useItemContext } from "@/context/itemsContext/ItemContext"
 
 interface EditRoleDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   currentRole: string
-  onSubmit: (newRole: string) => void
+  onSubmit: (newRole: string, rolName: string) => void
 }
 
 const availableRoles = [
@@ -17,6 +20,18 @@ const availableRoles = [
 ]
 
 export function EditRoleDialog({ open, onOpenChange, currentRole, onSubmit }: EditRoleDialogProps) {
+
+  const {rolList} = useItemContext()
+  const [availableRoles, setAvailableRoles] = useState<Role[]>(rolList)
+
+
+  useEffect(() => {
+    if(rolList.length > 0){
+      setAvailableRoles(rolList)
+    }
+  }, [rolList])
+
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -31,7 +46,7 @@ export function EditRoleDialog({ open, onOpenChange, currentRole, onSubmit }: Ed
             <Select
               defaultValue={currentRole}
               onValueChange={(value) => {
-                onSubmit(value)
+                onSubmit(value.split('|')[0],value.split('|')[1])
                 onOpenChange(false)
               }}
             >
@@ -40,8 +55,8 @@ export function EditRoleDialog({ open, onOpenChange, currentRole, onSubmit }: Ed
               </SelectTrigger>
               <SelectContent>
                 {availableRoles.map((role) => (
-                  <SelectItem key={role.id} value={role.name}>
-                    {role.name}
+                  <SelectItem key={role?.id} value={`${role?.id}|${role?.nombre}`}>
+                    {role?.nombre}
                   </SelectItem>
                 ))}
               </SelectContent>
