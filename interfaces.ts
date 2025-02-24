@@ -73,16 +73,16 @@ export interface IncidenciaEmmit {
 }
 
 
-export interface IncidenciaTable {
-  id: string;
-  descripcion: string;
-  created_at: string;
-  creador: string;
-  alumno: string;
-  tipoIncidencia: string;
-  severidad: string;
-  puntos: number;
-}
+// export interface IncidenciaTable {
+//   id: string;
+//   descripcion: string;
+//   created_at: string;
+//   creador: string;
+//   alumno: string;
+//   tipoIncidencia: string;
+//   severidad: string;
+//   puntos: number;
+// }
 
 export interface Alumno {
   idea: string;

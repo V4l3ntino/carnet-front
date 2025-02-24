@@ -1,6 +1,8 @@
-"use client"
+'use client'
 import React, { createContext, useContext } from 'react';
-import { Alumno, decodeJWT, Grado, Incidencia, IncidenciaTable, TipoIncidencia } from '../../../interfaces';
+import { Alumno, decodeJWT, Grado, Incidencia, TipoIncidencia } from '../../../interfaces';
+import { IncidenciaTable } from '../../../types/incidencias';
+
 
 // Define el tipo del contexto
 interface ContextType {
@@ -10,6 +12,8 @@ interface ContextType {
   alumnos: Alumno[]
 
   incidenciasTable: IncidenciaTable[]
+  newIncidenciaTable: IncidenciaTable | undefined
+  deleteIncidenciaId: string
 }
 
 export const ItemContext = createContext<ContextType | undefined>(undefined);
@@ -17,7 +21,7 @@ export const ItemContext = createContext<ContextType | undefined>(undefined);
 export const useItemContext = () => {
     const context = useContext(ItemContext);
     if (!context) {
-      throw new Error("useAuthContext debe usarse dentro de AuthProvider");
+      throw new Error("ItemContext debe usarse dentro de ItemProvider");
     }
     return context;
   };
