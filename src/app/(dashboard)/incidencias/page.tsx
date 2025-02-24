@@ -310,25 +310,33 @@ export default function IncidenciasPage() {
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                       ))}
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleEdit(row.original)}>
-                              <Edit className="mr-2 h-4 w-4" />
-                              Editar
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(row.original.id)}>
-                              <Trash className="mr-2 h-4 w-4" />
-                              Eliminar
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
+                      {
+                        userInfo?.permisos.find((item) => item.tipo == "w")?.incidencia ? (
+                          <TableCell>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                  <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => handleEdit(row.original)}>
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  Editar
+                                </DropdownMenuItem>
+                                {
+                                  userInfo?.permisos.find((item) => item.tipo == "d")?.incidencia ? (
+                                    <DropdownMenuItem className="text-red-600" onClick={() => handleDelete(row.original.id)}>
+                                      <Trash className="mr-2 h-4 w-4" />
+                                      Eliminar
+                                    </DropdownMenuItem>
+                                  ) : (``)
+                                }
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        ) : (``)
+                      }
                     </TableRow>
                   ))
                 ) : (
