@@ -54,7 +54,7 @@ export default function AccountPage() {
       email: formData.get("email") as string,
     }
     try {
-      const response = await fetch(`http://localhost:3000/api/user/${userInfo?.sub}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/${userInfo?.sub}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

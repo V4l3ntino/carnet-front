@@ -193,7 +193,7 @@ export function AppSidebar() {
               ) : (``)}
 
               {/* Settings */}
-              {userInfo?.permisos?.find((item) => item.tipo == "r")?.incidencia ? (
+              {userInfo?.permisos?.find((item) => item.tipo == "r")?.permisos ? (
                 <Collapsible>
                   <SidebarMenuItem className="flex flex-col">
                     <CollapsibleTrigger asChild>
@@ -210,10 +210,10 @@ export function AppSidebar() {
                       <SidebarMenuSub>
 
                         {
-                          userInfo.permisos.find((item) => item.tipo == "r")?.permisos ? (
+                          userInfo.permisos.find((item) => item.tipo == "r")?.permisos && userInfo.permisos.find((item) => item.tipo == "w")?.permisos ? (
                             <SidebarMenuSubItem>
                               <SidebarMenuSubButton asChild>
-                                <a href="#ver-faltas">Configurar Roles</a>
+                                <Link href={'settings/rols'}>Configurar Roles</Link>
                               </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
                           ) : (``)

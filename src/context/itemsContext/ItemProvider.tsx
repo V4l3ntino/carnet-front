@@ -11,6 +11,7 @@ import { IncidenciaTable, SeverityLevel } from "../../../types/incidencias";
 import { io, Socket } from "socket.io-client";
 import { Role } from "@/app/(dashboard)/settings/(rol)/rols/types";
 import { getAllRols } from "@/api/permisosCrud";
+import { toast } from "sonner"
 
 
 
@@ -91,7 +92,12 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }
 
-
+    const aplyRoles = async() => {
+        if(socket){
+            socket.emit("aplicarRoles")
+            toast.success("Cambios aplicados con éxito!")          
+        }
+    }
 
     useEffect(() => {
         fetchIncidencias()
@@ -100,7 +106,7 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
         fetchAlumnos()
         fetchRols()
         // Conecta al servidor WebSocket
-        const socketInstance = io("http://192.168.0.103:3000");
+        const socketInstance = io(`${process.env.NEXT_PUBLIC_BACKEND_URL}`);
 
         setSocket(socketInstance);
 
@@ -123,6 +129,7 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
         socketInstance.on("incidenciaDelete", (id: string) => {
             setDeleteincidenciaId(id)
         })
+        
 
     }, [])
 
@@ -135,7 +142,8 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
             incidenciasTable,
             newIncidenciaTable,
             deleteIncidenciaId,
-            rolList: roles
+            rolList: roles,
+            aplyRoles
         }}>
             {children}
         </ItemContext.Provider>

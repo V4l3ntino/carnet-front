@@ -12,6 +12,7 @@ interface ContextType {
   grados: Grado[]
   alumnos: Alumno[]
   rolList: Role[]
+  aplyRoles: () => void
 
   incidenciasTable: IncidenciaTable[]
   newIncidenciaTable: IncidenciaTable | undefined

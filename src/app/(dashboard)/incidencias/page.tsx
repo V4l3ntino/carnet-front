@@ -33,15 +33,23 @@ import { useAuthContext } from "@/context/AuthContext"
 import { v4 as uuidv4 } from "uuid"
 import { deleteIncidencia, saveIncidencia } from "../../../api/incidenciasCrud"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 
 export default function IncidenciasPage() {
   const { incidenciasTable, alumnos, tipoIncidencias, newIncidenciaTable, deleteIncidenciaId } = useItemContext()
-  const { userInfo } = useAuthContext()
+  const { userInfo, accessToken } = useAuthContext()
   const [data, setData] = useState<IncidenciaTable[]>(incidenciasTable)
 
+  const router = useRouter()
   useEffect(() => { setData(incidenciasTable) }, [incidenciasTable])
   useEffect(() => { console.log(data) }, [data])
+
+  useEffect(() => {
+    if(!userInfo?.permisos.find((item) => item.tipo == "r")?.incidencia){
+      router.push("/")
+    }
+  },[userInfo])
 
   useEffect(() => {
     if (newIncidenciaTable) {

@@ -14,6 +14,8 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import type { Permission, Role } from "./types"
 import { useItemContext } from "@/context/itemsContext/ItemContext"
 import { saveRol } from "@/api/permisosCrud"
+import { v4 as uuidv4 } from "uuid"
+
 
 const COLUMNS = [
   "admin_profile",
@@ -39,7 +41,7 @@ const PERMISSION_TYPES = {
 }
 
 export default function PermissionsTable({ initialRoles }: { initialRoles: Role[] }) {
-  const {rolList} = useItemContext()
+  const { rolList, aplyRoles } = useItemContext()
 
   const [roles, setRoles] = useState<Role[]>(initialRoles)
   const [selectedRole, setSelectedRole] = useState<string>(roles[0]?.id || "")
@@ -50,22 +52,22 @@ export default function PermissionsTable({ initialRoles }: { initialRoles: Role[
   const [searchTerm, setSearchTerm] = useState("")
 
   useEffect(() => {
-    if(rolList){
+    if (rolList) {
       setRoles(rolList)
     }
-  },[rolList])
-  
+  }, [rolList])
+
   useEffect(() => {
     const rolUpdate: Role | undefined = roles.find((item) => item.id == selectedRole)
-    if (rolUpdate){
+    if (rolUpdate) {
       try {
-        
+
         saveRol(rolUpdate)
       } catch (error) {
         console.log(error)
       }
     }
-  },[roles])
+  }, [roles])
 
   const currentRole = roles.find((role) => role.id === selectedRole)
 
@@ -84,7 +86,7 @@ export default function PermissionsTable({ initialRoles }: { initialRoles: Role[
 
     // Create permissions for each type (r,w,i,d)
     const newPermissions: Permission[] = ["r", "w", "i", "d"].map((tipo, index) => ({
-      id: Math.max(...roles.flatMap((r) => r.tabla.map((p) => p.id))) + index + 1,
+      id: uuidv4(),
       tipo: tipo as "r" | "w" | "i" | "d",
       admin_profile: selectedColumns.includes("admin_profile"),
       profile: selectedColumns.includes("profile"),
@@ -121,16 +123,16 @@ export default function PermissionsTable({ initialRoles }: { initialRoles: Role[
     setSearchTerm("")
   }
 
-  const togglePermission = (permissionId: number, column: keyof Permission) => {
+  const togglePermission = (permissionId: string, column: keyof Permission) => {
     setRoles((currentRoles) =>
       currentRoles.map((role) => ({
         ...role,
         tabla: role.tabla.map((permission) =>
           permission.id === permissionId
             ? {
-                ...permission,
-                [column]: !permission[column],
-              }
+              ...permission,
+              [column]: !permission[column],
+            }
             : permission,
         ),
       })),
@@ -146,6 +148,9 @@ export default function PermissionsTable({ initialRoles }: { initialRoles: Role[
             {currentRole && <p className="text-sm text-muted-foreground">{currentRole.descripcion}</p>}
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
+            <Button variant="outline" className="flex-shrink-0" onClick={() => (aplyRoles())}>
+              Apply
+            </Button>
             <Select value={selectedRole} onValueChange={setSelectedRole}>
               <SelectTrigger className="w-[180px] sm:w-[200px]">
                 <SelectValue placeholder="Select role" />
@@ -202,9 +207,8 @@ export default function PermissionsTable({ initialRoles }: { initialRoles: Role[
                               className="flex items-center gap-2 cursor-pointer"
                             >
                               <div
-                                className={`flex h-4 w-4 items-center justify-center rounded border ${
-                                  selectedColumns.includes(column) ? "bg-primary border-primary" : "border-input"
-                                }`}
+                                className={`flex h-4 w-4 items-center justify-center rounded border ${selectedColumns.includes(column) ? "bg-primary border-primary" : "border-input"
+                                  }`}
                               >
                                 {selectedColumns.includes(column) && (
                                   <Check className="h-3 w-3 text-primary-foreground" />
@@ -249,9 +253,8 @@ export default function PermissionsTable({ initialRoles }: { initialRoles: Role[
                         <Button
                           variant="ghost"
                           size="sm"
-                          className={`h-12 w-full rounded-none transition-colors ${
-                            permission[column] ? "hover:bg-green-50" : "hover:bg-red-50"
-                          }`}
+                          className={`h-12 w-full rounded-none transition-colors ${permission[column] ? "hover:bg-green-50" : "hover:bg-red-50"
+                            }`}
                           onClick={() => togglePermission(permission.id, column)}
                         >
                           {permission[column] ? (
