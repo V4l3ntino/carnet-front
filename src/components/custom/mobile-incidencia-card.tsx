@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ALUMNOS, severityColors } from "../../../types/incidencias"
+import { severityColors } from "../../../types/incidencias"
 import type { IncidenciaTable } from "../../../types/incidencias"
 import { useItemContext } from "@/context/itemsContext/ItemContext"
 
@@ -14,7 +14,7 @@ interface MobileIncidenciaCardProps {
 }
 
 export function MobileIncidenciaCard({ incidencia, onEdit, onDelete }: MobileIncidenciaCardProps) {
-  const { alumnos, tipoIncidencias } = useItemContext()
+  const { alumnos } = useItemContext()
   const alumno = alumnos.find((a) => a.idea === incidencia.alumno)
   const date = new Date(incidencia.created_at)
 

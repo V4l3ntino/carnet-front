@@ -10,7 +10,6 @@ import { Progress } from "@/components/ui/progress"
 import { useAuthContext } from "@/context/AuthContext"
 import { useRouter } from "next/navigation"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import Cookies from 'js-cookie';
 
 
 export default function AccountPage() {

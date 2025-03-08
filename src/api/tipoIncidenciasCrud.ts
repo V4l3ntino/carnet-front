@@ -42,7 +42,7 @@ export const saveTipoIncidencia = async(tipoIncidencia: TipoIncidenciaTable, gra
 
     
     } catch (error) {
-        
+        console.log(error)
     }
 }
 
@@ -62,7 +62,7 @@ export const deleteTipoIncidencia = async(id: string):Promise<void> => {
 
     
     } catch (error) {
-        
+     console.log(error)   
     }
 
 }

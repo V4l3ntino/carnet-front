@@ -1,6 +1,5 @@
-import { Alumno, Incidencia, IncidenciaEmmit, Profesor, TipoIncidencia, User } from "../../interfaces"
+import { Incidencia, IncidenciaEmmit, TipoIncidencia } from "../../interfaces"
 import { IncidenciaTable } from "../../types/incidencias"
-import { toast } from "sonner"
 
 export const saveIncidencia = async (incidencia: IncidenciaTable, creador: string, tipoIncidencias: TipoIncidencia[]): Promise<void> => {
     try {

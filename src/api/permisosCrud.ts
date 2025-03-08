@@ -1,7 +1,4 @@
 import { Permission, Role } from "@/app/(dashboard)/settings/(rol)/rols/types"
-import { Alumno, Incidencia, IncidenciaEmmit, Profesor, TipoIncidencia, User } from "../../interfaces"
-import { IncidenciaTable } from "../../types/incidencias"
-import { toast } from "sonner"
 
 export const savePerm = async (rol:Role): Promise<void> => {
     try {
@@ -23,8 +20,6 @@ export const savePerm = async (rol:Role): Promise<void> => {
           return result.json();
         });
       
-        // Esperar a que todas las peticiones se completen
-        const results = await Promise.all(requests);
         
       } catch (error) {
         console.error("Error en saveIncidencia:", error);

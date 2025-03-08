@@ -1,4 +1,4 @@
-import { Grado, TipoIncidencia } from "../../interfaces"
+import { Grado } from "../../interfaces"
 
 export const getAllGrados = async(): Promise<Grado[] | undefined> => {
 

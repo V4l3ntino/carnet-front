@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation"
 import { EditRoleDialog } from "./edit-role-dialog"
 import { useItemContext } from "@/context/itemsContext/ItemContext"
 import { BreadcrumbWithCustomSeparator } from "@/components/custom/breadcumps"
+import { useAuthContext } from "@/context/AuthContext"
 
 interface UserPermission {
   id: string
@@ -105,20 +106,22 @@ const sampleUsers: User[] = [
 ]
 
 export default function UsersTable() {
-  const {users, aplyRoles} = useItemContext()
+  const { users, aplyRoles } = useItemContext()
   const [data, setData] = useState<User[]>(users)
 
   useEffect(() => {
-    if(users.length > 0){
+    if (users.length > 0) {
       setData(users)
       console.log(users)
     }
-  },[users])
+  }, [users])
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
+
+  const { userInfo } = useAuthContext()
 
   const router = useRouter()
 
@@ -142,12 +145,12 @@ export default function UsersTable() {
         prev.map((user) =>
           user.id === editingUser.id
             ? {
-                ...user,
-                permiso: {
-                  ...user.permiso,
-                  nombre: rolName,
-                },
-              }
+              ...user,
+              permiso: {
+                ...user.permiso,
+                nombre: rolName,
+              },
+            }
             : user,
         ),
       )
@@ -161,20 +164,20 @@ export default function UsersTable() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         })
-  
+
         const dataJson = await response.json()
         if (!response.ok) {
           console.log(dataJson.message)
           return
         }
-        console.log("petición de update",dataJson)
+        console.log("petición de update", dataJson)
         // toast.info("Se han aplicado nuevos cambios en los permisos")
-  
+
       } catch (error) {
         console.error("Error al decodificar el token ", error)
       }
       aplyRoles()
-      
+
       // Close the dialog
       setEditingUser(null)
       setIsEditRoleOpen(false)
@@ -299,11 +302,11 @@ export default function UsersTable() {
       url: "/users"
     }
   ]
-  
+
 
   return (
     <>
-      <BreadcrumbWithCustomSeparator items={breadCumbs}/>
+      <BreadcrumbWithCustomSeparator items={breadCumbs} />
       <div className="h-full w-full space-y-4 p-4">
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
@@ -378,24 +381,33 @@ export default function UsersTable() {
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleEditRole(row.original)}>
-                              <Edit className="mr-2 h-4 w-4" />
-                              Edit Role
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() =>
-                                router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/users/${row.original.id}`)
-                              }
-                            >
-                              <Eye className="mr-2 h-4 w-4" />
-                              View Detail
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-600">
-                              <Trash className="mr-2 h-4 w-4" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
+                          {
+                            userInfo && userInfo?.permisos?.find((item) => item.tipo == "w")?.user ? (
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => handleEditRole(row.original)}>
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  Edit Role
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() =>
+                                    router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/users/${row.original.id}`)
+                                  }
+                                >
+                                  <Eye className="mr-2 h-4 w-4" />
+                                  View Detail
+                                </DropdownMenuItem>
+                                {
+                                  userInfo && userInfo?.permisos?.find((item) => item.tipo == "d")?.user ? (
+                                    <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-600">
+                                      <Trash className="mr-2 h-4 w-4" />
+                                      Delete
+                                    </DropdownMenuItem>
+                                  ) : (``)
+                                }
+                              </DropdownMenuContent>
+
+                            ) : (``)
+                          }
                         </DropdownMenu>
                       </TableCell>
                     </TableRow>

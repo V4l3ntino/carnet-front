@@ -1,5 +1,5 @@
 "use client"
-import React, { createContext, useContext } from 'react';
+import { createContext, useContext } from 'react';
 import { decodeJWT } from '../../interfaces';
 
 // Define el tipo del contexto

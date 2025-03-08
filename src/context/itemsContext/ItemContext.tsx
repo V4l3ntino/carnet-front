@@ -1,6 +1,6 @@
 'use client'
-import React, { createContext, useContext } from 'react';
-import { Alumno, decodeJWT, Grado, Incidencia, TipoIncidencia, UserGQL } from '../../../interfaces';
+import { createContext, useContext } from 'react';
+import { Alumno, Grado, Incidencia, TipoIncidencia, UserGQL } from '../../../interfaces';
 import { IncidenciaTable } from '../../../types/incidencias';
 import { Role } from '@/app/(dashboard)/settings/(rol)/rols/types';
 

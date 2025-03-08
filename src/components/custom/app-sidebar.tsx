@@ -160,18 +160,22 @@ export function AppSidebar() {
                 ) : (``)
               }
 
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  tooltip="Dashboard"
-                  className="group-data-[collapsible=icon]:justify-center"
-                >
-                  <Link href={"/users"}>
-                    <User2Icon className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
-                    <span className="group-data-[collapsible=icon]:hidden">Usuarios</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {
+                userInfo && userInfo?.permisos?.find((item) => item.tipo == "r")?.user ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip="Dashboard"
+                      className="group-data-[collapsible=icon]:justify-center"
+                    >
+                      <Link href={"/users"}>
+                        <User2Icon className="mr-2 h-4 w-4 group-data-[collapsible=icon]:mr-0" />
+                        <span className="group-data-[collapsible=icon]:hidden">Usuarios</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : (``)
+              }
 
               {/* Faltas 
               {userInfo?.permisos?.find((item) => item.tipo == "r")?.incidencia ? (
