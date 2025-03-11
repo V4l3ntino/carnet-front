@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { severityColors } from "../../../types/incidencias"
 import type { IncidenciaTable, SeverityLevel } from "../../../types/incidencias"
 import { useItemContext } from "@/context/itemsContext/ItemContext"
+import { useAuthContext } from "@/context/AuthContext"
 
 interface MobileIncidenciaCardProps {
   incidencia: IncidenciaTable
@@ -17,6 +18,8 @@ export function MobileIncidenciaCard({ incidencia, onEdit, onDelete }: MobileInc
   const { alumnos } = useItemContext()
   const alumno = alumnos.find((a) => a.idea === incidencia.alumno)
   const date = new Date(incidencia.created_at)
+  const { userInfo } = useAuthContext()
+
 
   return (
     <Card className="mb-4">
@@ -46,21 +49,28 @@ export function MobileIncidenciaCard({ incidencia, onEdit, onDelete }: MobileInc
             </div>
           </div>
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => onEdit(incidencia)}>
-                <Edit className="mr-2 h-4 w-4" />
-                Editar
-              </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600" onClick={() => onDelete(incidencia.id)}>
-                <Trash className="mr-2 h-4 w-4" />
-                Eliminar
-              </DropdownMenuItem>
-            </DropdownMenuContent>
+            {userInfo && userInfo?.permisos.find((item) => item.tipo == "w")?.incidencia ? (
+              <>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 w-8 p-0">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => onEdit(incidencia)}>
+                    <Edit className="mr-2 h-4 w-4" />
+                    Editar
+                  </DropdownMenuItem>
+                  {userInfo && userInfo?.permisos.find((item) => item.tipo == "d")?.incidencia ? (
+                    <DropdownMenuItem className="text-red-600" onClick={() => onDelete(incidencia.id)}>
+                      <Trash className="mr-2 h-4 w-4" />
+                      Eliminar
+                    </DropdownMenuItem>
+                  ) : ("")}
+                </DropdownMenuContent>
+              </>
+            ) : ("")}
+
           </DropdownMenu>
         </div>
       </CardContent>

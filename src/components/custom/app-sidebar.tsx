@@ -231,7 +231,7 @@ export function AppSidebar() {
                           userInfo.permisos.find((item) => item.tipo == "r")?.permisos && userInfo.permisos.find((item) => item.tipo == "w")?.permisos ? (
                             <SidebarMenuSubItem>
                               <SidebarMenuSubButton asChild>
-                                <Link href={'settings/rols'}>Configurar Roles</Link>
+                                <Link href={'/settings/rols'}>Configurar Roles</Link>
                               </SidebarMenuSubButton>
                             </SidebarMenuSubItem>
                           ) : (``)

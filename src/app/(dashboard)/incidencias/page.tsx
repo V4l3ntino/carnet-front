@@ -258,16 +258,19 @@ export default function IncidenciasPage() {
               className="w-full sm:max-w-xs"
             />
             <div className="flex flex-1 gap-2 sm:justify-end">
-              <Button
-                onClick={() => {
-                  setEditingIncidencia(null)
-                  setIsDialogOpen(true)
-                }}
-                className="w-full sm:w-auto"
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                Nueva Incidencia
-              </Button>
+              {userInfo && userInfo?.permisos.find((item) => item.tipo == "i")?.incidencia ? (
+                <Button
+                  onClick={() => {
+                    setEditingIncidencia(null)
+                    setIsDialogOpen(true)
+                  }}
+                  className="w-full sm:w-auto"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  Nueva Incidencia
+                </Button>
+              ) : ("")}
+
               <div className="hidden md:block">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
