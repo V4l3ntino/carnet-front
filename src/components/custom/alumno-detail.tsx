@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { AlertCircle, BookOpen, Calendar, Clock, Users } from "lucide-react"
+import { AlertCircle, BookOpen, Calendar, Clock, MoreHorizontal, Users } from "lucide-react"
 import type { CuentaPuntos, TipoIncidencia } from "../../../interfaces"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 // import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 
 // Define severity levels and colors
@@ -115,17 +116,17 @@ export default function AlumnoDetailView({ alumno = alumnoExample }: { alumno?: 
   }
 
   return (
-    <Card className="w-full max-w-3xl mx-auto">
+    <Card className="w-full max-w-3xl mx-auto overflow-hidden">
       <CardHeader>
-        <div className="flex justify-between items-start">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
           <div>
-            <CardTitle className="text-2xl">Perfil del Alumno</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl">Perfil del Alumno</CardTitle>
             <CardDescription>
               Información detallada del estudiante <strong>{alumno.fullName}</strong>
             </CardDescription>
           </div>
           {alumno.repetidor && (
-            <Badge variant="outline" className="bg-amber-100 text-amber-800 border-amber-200">
+            <Badge variant="outline" className="bg-amber-100 text-amber-800 border-amber-200 self-start">
               Repetidor
             </Badge>
           )}
@@ -133,19 +134,55 @@ export default function AlumnoDetailView({ alumno = alumnoExample }: { alumno?: 
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="general">Información General</TabsTrigger>
-            <TabsTrigger value="incidencias">
-              Incidencias
-              {alumno.incidencia && alumno.incidencia.length > 0 && (
-                <Badge variant="secondary" className="ml-2">
-                  {alumno.incidencia.length}
-                </Badge>
-              )}
-            </TabsTrigger>
-            <TabsTrigger value="grupo">Grupo</TabsTrigger>
-            <TabsTrigger value="puntos">Cantidad de Puntos</TabsTrigger>
-          </TabsList>
+          <div className="w-full">
+            {/* Show tabs on md and larger screens */}
+            <div className="hidden md:block">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="general">Información General</TabsTrigger>
+                <TabsTrigger value="incidencias">
+                  Incidencias
+                  {alumno.incidencia && alumno.incidencia.length > 0 && (
+                    <Badge variant="secondary" className="ml-2">
+                      {alumno.incidencia.length}
+                    </Badge>
+                  )}
+                </TabsTrigger>
+                <TabsTrigger value="grupo">Grupo</TabsTrigger>
+                <TabsTrigger value="puntos">Cantidad de Puntos</TabsTrigger>
+              </TabsList>
+            </div>
+
+            {/* Show dropdown menu on smaller screens */}
+            <div className="md:hidden flex justify-between items-center border-b pb-2">
+              <div className="text-sm font-medium">
+                {activeTab === "general" && "Información General"}
+                {activeTab === "incidencias" && "Incidencias"}
+                {activeTab === "grupo" && "Grupo"}
+                {activeTab === "puntos" && "Cantidad de Puntos"}
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <MoreHorizontal className="h-5 w-5" />
+                    <span className="sr-only">Menú</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setActiveTab("general")}>Información General</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab("incidencias")}>
+                    Incidencias
+                    {alumno.incidencia && alumno.incidencia.length > 0 && (
+                      <Badge variant="secondary" className="ml-2">
+                        {alumno.incidencia.length}
+                      </Badge>
+                    )}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab("grupo")}>Grupo</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab("puntos")}>Cantidad de Puntos</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
 
           <TabsContent value="general" className="mt-4 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -173,12 +210,14 @@ export default function AlumnoDetailView({ alumno = alumnoExample }: { alumno?: 
                 {alumno.incidencia.map((inc) => (
                   <Card key={inc.id}>
                     <CardHeader className="py-3">
-                      <div className="flex justify-between items-center">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                         <div className="flex items-center gap-2">
                           <AlertCircle className={`h-5 w-5 `} />
                           <CardTitle className="text-base">{inc.tipoIncidencia.descripcion}</CardTitle>
                         </div>
-                        <Badge className={severityColors[inc.tipoIncidencia?.grado?.nombre as SeverityLevel]}>
+                        <Badge
+                          className={`${severityColors[inc.tipoIncidencia?.grado?.nombre as SeverityLevel]} mt-1 sm:mt-0 self-start sm:self-auto`}
+                        >
                           {inc.tipoIncidencia?.grado?.nombre} -{inc.tipoIncidencia.grado.cantidadPuntos}p
                         </Badge>
                       </div>
@@ -256,9 +295,9 @@ export default function AlumnoDetailView({ alumno = alumnoExample }: { alumno?: 
                       <span className="text-sm font-medium">Progreso de Puntos</span>
                       <span className="text-sm font-medium">{alumno.cuentaPuntos.cantidad}/100</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-6 dark:bg-gray-700">
+                    <div className="w-full bg-gray-200 rounded-full h-4 sm:h-6 dark:bg-gray-700">
                       <div
-                        className={`h-6 rounded-full ${
+                        className={`h-4 sm:h-6 rounded-full ${
                           alumno.cuentaPuntos.cantidad > 75
                             ? "bg-green-600"
                             : alumno.cuentaPuntos.cantidad > 50
@@ -300,9 +339,11 @@ export default function AlumnoDetailView({ alumno = alumnoExample }: { alumno?: 
           </TabsContent>
         </Tabs>
       </CardContent>
-      <CardFooter className="flex justify-end gap-2">
-        <Button variant="outline">Editar</Button>
-        <Button>Ver expediente completo</Button>
+      <CardFooter className="flex flex-col sm:flex-row justify-end gap-2">
+        <Button variant="outline" className="w-full sm:w-auto">
+          Editar
+        </Button>
+        <Button className="w-full sm:w-auto">Ver expediente completo</Button>
       </CardFooter>
     </Card>
   )

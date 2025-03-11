@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { BookOpen, Calendar, Clock, GraduationCap, Users } from "lucide-react"
+import { BookOpen, Calendar, Clock, GraduationCap, MoreHorizontal, Users } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 // These interfaces would typically be imported from your types file
 interface Group {
@@ -87,31 +88,63 @@ export default function ProfesorDetailView({ profesor = profesorExample }: { pro
   }
 
   return (
-    <Card className="w-full max-w-3xl mx-auto">
+    <Card className="w-full max-w-3xl mx-auto overflow-hidden">
       <CardHeader>
-        <div className="flex justify-between items-start">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
           <div>
-            <CardTitle className="text-2xl">Perfil del Profesor</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl">Perfil del Profesor</CardTitle>
             <CardDescription>Información detallada del docente</CardDescription>
           </div>
-          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 self-start">
             {profesor.materia}
           </Badge>
         </div>
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="general">Información General</TabsTrigger>
-            <TabsTrigger value="grupos">
-              Grupos
-              {profesor.grupo && profesor.grupo.length > 0 && (
-                <Badge variant="secondary" className="ml-2">
-                  {profesor.grupo.length}
-                </Badge>
-              )}
-            </TabsTrigger>
-          </TabsList>
+          <div className="w-full">
+            {/* Show tabs on md and larger screens */}
+            <div className="hidden md:block">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="general">Información General</TabsTrigger>
+                <TabsTrigger value="grupos">
+                  Grupos
+                  {profesor.grupo && profesor.grupo.length > 0 && (
+                    <Badge variant="secondary" className="ml-2">
+                      {profesor.grupo.length}
+                    </Badge>
+                  )}
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            {/* Show dropdown menu on smaller screens */}
+            <div className="md:hidden flex justify-between items-center border-b pb-2">
+              <div className="text-sm font-medium">
+                {activeTab === "general" && "Información General"}
+                {activeTab === "grupos" && "Grupos"}
+              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <MoreHorizontal className="h-5 w-5" />
+                    <span className="sr-only">Menú</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setActiveTab("general")}>Información General</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setActiveTab("grupos")}>
+                    Grupos
+                    {profesor.grupo && profesor.grupo.length > 0 && (
+                      <Badge variant="secondary" className="ml-2">
+                        {profesor.grupo.length}
+                      </Badge>
+                    )}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
 
           <TabsContent value="general" className="mt-4 space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -162,9 +195,11 @@ export default function ProfesorDetailView({ profesor = profesorExample }: { pro
                 {profesor.grupo.map((grupo) => (
                   <Card key={grupo.id}>
                     <CardHeader className="py-3">
-                      <div className="flex justify-between items-center">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                         <CardTitle className="text-base">{grupo.nombre}</CardTitle>
-                        <Badge variant="outline">{grupo.alumnos} alumnos</Badge>
+                        <Badge variant="outline" className="self-start sm:self-auto">
+                          {grupo.alumnos} alumnos
+                        </Badge>
                       </div>
                       <CardDescription className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
@@ -185,9 +220,11 @@ export default function ProfesorDetailView({ profesor = profesorExample }: { pro
           </TabsContent>
         </Tabs>
       </CardContent>
-      <CardFooter className="flex justify-end gap-2">
-        <Button variant="outline">Editar</Button>
-        <Button>Ver horario</Button>
+      <CardFooter className="flex flex-col sm:flex-row justify-end gap-2">
+        <Button variant="outline" className="w-full sm:w-auto">
+          Editar
+        </Button>
+        <Button className="w-full sm:w-auto">Ver horario</Button>
       </CardFooter>
     </Card>
   )

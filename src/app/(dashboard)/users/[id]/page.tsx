@@ -184,6 +184,7 @@ const Page = () => {
 
   return <div>
     <BreadcrumbWithCustomSeparator items={breadCumbs} />
+    <br />
     {
       user.alumnoProfile ? (
         <AlumnoDetailView

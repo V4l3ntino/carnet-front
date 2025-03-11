@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
+import { useAuthContext } from "@/context/AuthContext"
 
 interface UserPermission {
   id: string
@@ -30,8 +31,10 @@ interface MobileUserCardProps {
   onDelete: (id: string) => void
 }
 
-export function MobileUserCard({ user, onEditRole, onDelete }: MobileUserCardProps) {
+export function MobileUserCard({ user, onEditRole }: MobileUserCardProps) {
   const router = useRouter()
+  const { userInfo } = useAuthContext()
+
 
   return (
     <Card>
@@ -46,22 +49,25 @@ export function MobileUserCard({ user, onEditRole, onDelete }: MobileUserCardPro
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => onEditRole(user)}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit Role
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/users/${user.id}`)}
-                  >
-                    <Eye className="mr-2 h-4 w-4" />
-                    View Detail
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onDelete(user.id)} className="text-red-600">
+                {userInfo && userInfo?.permisos?.find((item) => item.tipo == "w")?.user ? (
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem onClick={() => onEditRole(user)}>
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit Role
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/users/${user.id}`)}
+                    >
+                      <Eye className="mr-2 h-4 w-4" />
+                      View Detail
+                    </DropdownMenuItem>
+                    {/* <DropdownMenuItem onClick={() => onDelete(user.id)} className="text-red-600">
                     <Trash className="mr-2 h-4 w-4" />
                     Delete
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
+                  </DropdownMenuItem> */}
+                  </DropdownMenuContent>
+                ) : ("")}
+
               </DropdownMenu>
             </div>
             <div className="space-y-1">
