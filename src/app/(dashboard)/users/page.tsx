@@ -398,10 +398,11 @@ export default function UsersTable() {
                                 </DropdownMenuItem>
                                 {
                                   userInfo && userInfo?.permisos?.find((item) => item.tipo == "d")?.user ? (
-                                    <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-600">
-                                      <Trash className="mr-2 h-4 w-4" />
-                                      Delete
-                                    </DropdownMenuItem>
+                                    // <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-600">
+                                    //   <Trash className="mr-2 h-4 w-4" />
+                                    //   Delete
+                                    // </DropdownMenuItem>
+                                    ""
                                   ) : (``)
                                 }
                               </DropdownMenuContent>

@@ -39,7 +39,7 @@ import { BreadcrumbWithCustomSeparator } from "@/components/custom/breadcumps"
 
 export default function IncidenciasPage() {
   const { incidenciasTable, alumnos, tipoIncidencias, newIncidenciaTable, deleteIncidenciaId } = useItemContext()
-  const { userInfo, accessToken } = useAuthContext()
+  const { userInfo } = useAuthContext()
   const [data, setData] = useState<IncidenciaTable[]>(incidenciasTable)
 
   const router = useRouter()
@@ -182,7 +182,7 @@ export default function IncidenciasPage() {
       return;
     }
 
-    setData((prev) => [incidencia, ...prev])
+    // setData((prev) => [incidencia, ...prev])
 
     toast.success("¡Éxito!", {
       description: "Incidencia registrada correctamente."

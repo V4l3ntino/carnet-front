@@ -74,6 +74,7 @@ export async function fetchOneUserGQL() {
         })
     })
     const data = await request.json()
+    console.log("pruebas", data.data.getUsersbyId)
     
-    return await data.data.getUsers
+    return await data.data.getUsersbyId
 }

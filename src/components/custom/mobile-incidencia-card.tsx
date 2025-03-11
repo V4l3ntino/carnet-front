@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { severityColors } from "../../../types/incidencias"
-import type { IncidenciaTable } from "../../../types/incidencias"
+import type { IncidenciaTable, SeverityLevel } from "../../../types/incidencias"
 import { useItemContext } from "@/context/itemsContext/ItemContext"
 
 interface MobileIncidenciaCardProps {
@@ -41,7 +41,7 @@ export function MobileIncidenciaCard({ incidencia, onEdit, onDelete }: MobileInc
               {incidencia.tipoIncidencia}
             </div>
             <div className="flex items-center justify-between w-full">
-              <Badge className={severityColors[incidencia.severidad]}>{incidencia.severidad}</Badge>
+              <Badge className={severityColors[incidencia.severidad as SeverityLevel]}>{incidencia.severidad}</Badge>
               <span className="font-medium text-red-500">{incidencia.puntos} puntos</span>
             </div>
           </div>
