@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { DataTableColumnHeader } from "@/components/custom/data-table-column-header"
-import { MobileIncidenciaCard } from "@/components/custom/mobile-incidencia-card"
+import { MobileTipoIncidenciaCard } from "@/components/custom/mobile-tipo-incidencia-card"
 import { TipoIncidenciaDialog } from "@/components/custom/tipo-incidencia-dialog"
 import type { IncidenciaTable } from "../../../../types/incidencias"
 import { DataTablePagination } from "@/components/custom/data-table-pagination"
@@ -319,9 +319,9 @@ export default function IncidenciasPage() {
             {/* Mobile View */}
             <div className="block md:hidden space-y-4">
               {table.getRowModel().rows.map((row) => (
-                <MobileIncidenciaCard
+                <MobileTipoIncidenciaCard
                   key={row.original.id}
-                  incidencia={row.original}
+                  tipoincidencia={row.original}
                   onEdit={handleEdit}
                   onDelete={handleDelete}
                 />
