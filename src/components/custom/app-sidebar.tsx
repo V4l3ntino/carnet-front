@@ -148,7 +148,7 @@ export function AppSidebar() {
                             userInfo.permisos?.find((item) => item.tipo == "r")?.tipo_incidencia ? (
                               <SidebarMenuSubItem>
                                 <SidebarMenuSubButton asChild>
-                                  <a href="#crear-incidencias">Tipo incidencias</a>
+                                  <a href="/tipo-incidencias">Tipo incidencias</a>
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
                             ) : (``)

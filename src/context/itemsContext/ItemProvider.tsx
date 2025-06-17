@@ -21,7 +21,9 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [incidencias, setIncidencias] = useState<Incidencia[]>([])
     const [incidenciasTable, setIncidenciasTable] = useState<IncidenciaTable[]>([])
     const [newIncidenciaTable, setNewIncidenciaTable] = useState<IncidenciaTable>()
+    const [newTipoIncidencia, setNewTipoIncidencia] = useState<TipoIncidencia>()
     const [deleteIncidenciaId, setDeleteincidenciaId] = useState<string>("")
+    const [deleteTipoIncidenciaId, setDeleteTipoIncidenciaId] = useState<string>("")
     const [roles, setRoles] = useState<Role[]>([])
 
     const [tipoIncidencias, setTipoIncidencias] = useState<TipoIncidencia[]>([])
@@ -163,7 +165,14 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
         socketInstance.on("incidenciaDelete", (id: string) => {
             setDeleteincidenciaId(id)
         })
-
+        
+        socketInstance.on("tipoincidencia", (data: TipoIncidencia) => {
+            setNewTipoIncidencia(data)
+        })
+        
+        socketInstance.on("tipoincidenciaDelete", (id: string) => {
+            setDeleteTipoIncidenciaId(id)
+        })
 
     }, [])
 
@@ -175,7 +184,9 @@ export const ItemProvider: React.FC<{ children: React.ReactNode }> = ({ children
             alumnos,
             incidenciasTable,
             newIncidenciaTable,
+            newTipoIncidencia,
             deleteIncidenciaId,
+            deleteTipoIncidenciaId,
             rolList: roles,
             aplyRoles,
             users

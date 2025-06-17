@@ -1,4 +1,4 @@
-import { Grado, TipoIncidencia, TipoIncidenciaTable } from "../interfaces"
+import { Grado, TipoIncidencia, TipoIncidenciaTable } from "../../interfaces"
 
 export const getAllTipoIncidencias = async(): Promise<TipoIncidencia[] | undefined> => {
 
@@ -17,22 +17,22 @@ export const getAllTipoIncidencias = async(): Promise<TipoIncidencia[] | undefin
 
 }
 
-export const saveTipoIncidencia = async(tipoIncidencia: TipoIncidenciaTable, grados: Grado[]):Promise<void> => {
+export const saveTipoIncidencia = async(tipoIncidencia: Object):Promise<void> => {
     try {
 
-       const GRADO = grados.find((item) => item.nombre === tipoIncidencia.grado)
-       const TIPO_INCIDENCIA = {
-        user_id: "4ec0c4d1-bd90-4f55-94b6-79c3b55cb761",
-        descripcion: tipoIncidencia.descripcion,
-        grado: GRADO!.id,
-        id: tipoIncidencia.id,
-       }
+    //    const GRADO = grados.find((item) => item.nombre === tipoIncidencia.grado)
+    //    const TIPO_INCIDENCIA = {
+    //     user_id: "4ec0c4d1-bd90-4f55-94b6-79c3b55cb761",
+    //     descripcion: tipoIncidencia.descripcion,
+    //     grado: GRADO!.id,
+    //     id: tipoIncidencia.id,
+    //    }
 
-       console.log(TIPO_INCIDENCIA)
+    //    console.log(TIPO_INCIDENCIA)
         const result = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tipo-incidencia`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(TIPO_INCIDENCIA)
+            body: JSON.stringify(tipoIncidencia)
         })
 
         if(!result.ok){

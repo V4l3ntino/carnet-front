@@ -118,8 +118,9 @@ export interface Alumno {
 export interface TipoIncidencia {
   id: string;
   descripcion: string;
-  created_at: string;
+  created_at?: string;
   grado: Grado;
+  user_id?: string
 }
 
 export interface TipoIncidenciaTable {

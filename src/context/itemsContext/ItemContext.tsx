@@ -16,7 +16,9 @@ interface ContextType {
 
   incidenciasTable: IncidenciaTable[]
   newIncidenciaTable: IncidenciaTable | undefined
+  newTipoIncidencia: TipoIncidencia | undefined
   deleteIncidenciaId: string
+  deleteTipoIncidenciaId: string
 
   users: UserGQL[]
 }
