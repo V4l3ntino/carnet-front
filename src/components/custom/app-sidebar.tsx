@@ -153,6 +153,15 @@ export function AppSidebar() {
                               </SidebarMenuSubItem>
                             ) : (``)
                           }
+                          {
+                            userInfo.permisos?.find((item) => item.tipo == "r")?.grado ? (
+                              <SidebarMenuSubItem>
+                                <SidebarMenuSubButton asChild>
+                                  <Link href={"/grados"}>Settings Grados</Link>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            ) : (``)
+                          }
                         </SidebarMenuSub>
                       </CollapsibleContent>
                     </SidebarMenuItem>
