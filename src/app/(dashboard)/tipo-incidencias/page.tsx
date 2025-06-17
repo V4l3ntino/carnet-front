@@ -48,7 +48,7 @@ export default function IncidenciasPage() {
   useEffect(() => { console.log(data) }, [data])
 
   useEffect(() => {
-    if (userInfo && !userInfo?.permisos.find((item) => item.tipo == "r")?.incidencia) {
+    if (userInfo && !userInfo?.permisos.find((item) => item.tipo == "r")?.tipo_incidencia) {
       router.push("/")
     }
   }, [userInfo])
@@ -255,8 +255,8 @@ export default function IncidenciasPage() {
       url: "/"
     },
     {
-      name: "Incidencias",
-      url: "/incidencias"
+      name: "Tipo incidencias",
+      url: "/tipo-incidencias"
     }
   ]
 
