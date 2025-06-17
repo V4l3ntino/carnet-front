@@ -283,7 +283,7 @@ export default function IncidenciasPage() {
                   className="w-full sm:w-auto"
                 >
                   <Plus className="mr-2 h-4 w-4" />
-                  Nueva Incidencia
+                  Añadir
                 </Button>
               ) : ("")}
 

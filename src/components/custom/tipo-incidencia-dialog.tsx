@@ -18,6 +18,7 @@ import { ALUMNOS, TIPOS_INCIDENCIA } from "../../../types/incidencias"
 import type { IncidenciaTable } from "../../../types/incidencias"
 import { useItemContext } from "@/context/itemsContext/ItemContext"
 import { TipoIncidencia } from "../../../interfaces"
+type SeverityLevel = "Leve" | "Grave" | "Muy Grave"
 
 const formSchema = z.object({
   descripcion: z.string().min(1, "La descripción es requerida"),
@@ -49,7 +50,11 @@ export function TipoIncidenciaDialog({ open, onOpenChange, onSubmit, defaultValu
 
   useEffect(() => {
     if (defaultValues) {
-      form.reset(defaultValues)
+      const defaultObject = {
+        descripcion: defaultValues.descripcion,
+        severidad: defaultValues.grado?.nombre as SeverityLevel
+      }
+      form.reset(defaultObject)
     }
   }, [defaultValues, form])
 
